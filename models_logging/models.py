@@ -1,16 +1,18 @@
 import json
 
-from .settings import ADDED, CHANGED, DELETED, LOGGING_USER_MODEL, USE_POSTGRES, JSON_ENCODER
+from .settings import ADDED, CHANGED, DELETED, LOGGING_USER_MODEL, USE_POSTGRES, JSON_ENCODER, DJANGO_MAYOR_VERSION
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
-if USE_POSTGRES:
+if USE_POSTGRES and DJANGO_MAYOR_VERSION >= 4:
+    from django.db.models import JSONField
+elif USE_POSTGRES:
     from django.contrib.postgres.fields import JSONField
 
 from django.db import models, transaction
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from six import python_2_unicode_compatible
 
 

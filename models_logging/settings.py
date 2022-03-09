@@ -1,3 +1,4 @@
+import django
 from django.conf import settings
 from django.db import connections
 from django.utils.module_loading import import_string
@@ -30,3 +31,4 @@ USE_POSTGRES = connections[LOGGING_DATABASE].client.executable_name == 'psql'
 
 JSON_ENCODER_PATH = getattr(settings, 'LOGGING_JSON_ENCODER', 'models_logging.utils.ExtendedEncoder')
 JSON_ENCODER = import_string(JSON_ENCODER_PATH)
+DJANGO_MAYOR_VERSION = django.VERSION[0]

@@ -2,7 +2,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import models_logging.models
-from models_logging.settings import LOGGING_USER_MODEL, USE_POSTGRES
+from models_logging.settings import LOGGING_USER_MODEL, USE_POSTGRES, DJANGO_MAYOR_VERSION
 
 operations = [
     migrations.AlterField(
@@ -21,14 +21,16 @@ operations = [
     ),
 ]
 
-if USE_POSTGRES:
-    import django.contrib.postgres.fields.jsonb
+if USE_POSTGRES and DJANGO_MAYOR_VERSION >= 4:
+    from django.db.models import JSONField
+elif USE_POSTGRES:
+    from django.contrib.postgres.fields import JSONField
 
     operations.append(
         migrations.AlterField(
             model_name='change',
             name='changed_data',
-            field=django.contrib.postgres.fields.jsonb.JSONField(
+            field=JSONField(
                 blank=True,
                 encoder=models_logging.models.get_encoder,
                 null=True
